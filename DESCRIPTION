@@ -19,6 +19,7 @@ Imports:
     datasauRus,
     plotly,
     EnvStats,
+    Ecdat,
     rmarkdown (>= 1.11),
     AER,
     magick,
