@@ -1,0 +1,12 @@
+app <- ShinyDriver$new("../")
+app$snapshotInit("mytest")
+
+app$snapshot()
+app$setInputs(sb = 2.5)
+app$setInputs(ib = -2.5)
+app$setInputs(ib = -3)
+app$setInputs(sb = 2)
+app$setInputs(ib = -2.5)
+app$setInputs(ib = -2)
+app$setInputs(sb = 3)
+app$snapshot()

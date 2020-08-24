@@ -1,0 +1,12 @@
+.Rproj.user
+.Rhistory
+.RData
+_publish.R
+_book
+_bookdown_files
+rsconnect
+/data/
+/inst/shinys/**/*.html
+/inst/tutorials/**/*.html
+/inst/tutorials/**/*data
+inst/tutorials/chapter2/chapter2_files/
