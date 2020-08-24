@@ -23,7 +23,8 @@ Imports:
     rmarkdown (>= 1.11),
     AER,
     magick,
-    dplyr
+    dplyr,
+    tidyverse
 Suggests:
   shinytest,
   testthat
