@@ -1,4 +1,4 @@
 library(testthat)
-library(ScPoEconometrics)
+library(ScPoApps)
 
-test_check("ScPoEconometrics")
+test_check("ScPoApps")

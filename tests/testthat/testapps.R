@@ -10,7 +10,7 @@ test_that("anscombe app works", {
   # Use compareImages=FALSE because the expected image screenshots were created
   # on a Mac, and they will differ from screenshots taken on the CI platform,
   # which runs on Linux.
-  appdir <- system.file(package = "ScPoEconometrics", "shinys","anscombe")
+  appdir <- system.file(package = "ScPoApps", "shinys","anscombe")
   expect_pass(testApp(appdir, compareImages = FALSE))
 })
 
@@ -21,7 +21,7 @@ test_that("continuous correlation app works", {
   # Use compareImages=FALSE because the expected image screenshots were created
   # on a Mac, and they will differ from screenshots taken on the CI platform,
   # which runs on Linux.
-  appdir <- system.file(package = "ScPoEconometrics", "shinys","corr_continuous")
+  appdir <- system.file(package = "ScPoApps", "shinys","corr_continuous")
   expect_pass(testApp(appdir, compareImages = FALSE))
 })
 
@@ -32,7 +32,7 @@ test_that("simple reg app works", {
   # Use compareImages=FALSE because the expected image screenshots were created
   # on a Mac, and they will differ from screenshots taken on the CI platform,
   # which runs on Linux.
-  appdir <- system.file(package = "ScPoEconometrics", "shinys","reg_simple")
+  appdir <- system.file(package = "ScPoApps", "shinys","reg_simple")
   expect_pass(testApp(appdir, compareImages = FALSE))
 })
 
@@ -43,7 +43,7 @@ test_that("rescale app works", {
   # Use compareImages=FALSE because the expected image screenshots were created
   # on a Mac, and they will differ from screenshots taken on the CI platform,
   # which runs on Linux.
-  appdir <- system.file(package = "ScPoEconometrics", "shinys","Rescale")
+  appdir <- system.file(package = "ScPoApps", "shinys","Rescale")
   expect_pass(testApp(appdir, compareImages = FALSE))
 })
 
@@ -56,7 +56,7 @@ test_that("reg_constrained app works", {
   # Use compareImages=FALSE because the expected image screenshots were created
   # on a Mac, and they will differ from screenshots taken on the CI platform,
   # which runs on Linux.
-  appdir <- system.file(package = "ScPoEconometrics", "shinys","reg_constrained")
+  appdir <- system.file(package = "ScPoApps", "shinys","reg_constrained")
   expect_pass(testApp(appdir, compareImages = FALSE))
 })
 
@@ -67,7 +67,7 @@ test_that("reg standardized app works", {
   # Use compareImages=FALSE because the expected image screenshots were created
   # on a Mac, and they will differ from screenshots taken on the CI platform,
   # which runs on Linux.
-  appdir <- system.file(package = "ScPoEconometrics", "shinys","reg_standardized")
+  appdir <- system.file(package = "ScPoApps", "shinys","reg_standardized")
   expect_pass(testApp(appdir, compareImages = FALSE))
 })
 
@@ -78,7 +78,7 @@ test_that("dmeaned_reg app works", {
   # Use compareImages=FALSE because the expected image screenshots were created
   # on a Mac, and they will differ from screenshots taken on the CI platform,
   # which runs on Linux.
-  appdir <- system.file(package = "ScPoEconometrics", "shinys","demeaned_reg")
+  appdir <- system.file(package = "ScPoApps", "shinys","demeaned_reg")
   expect_pass(testApp(appdir, compareImages = FALSE))
 })
 
@@ -89,7 +89,7 @@ test_that("SSR_cone app works", {
   # Use compareImages=FALSE because the expected image screenshots were created
   # on a Mac, and they will differ from screenshots taken on the CI platform,
   # which runs on Linux.
-  appdir <- system.file(package = "ScPoEconometrics", "shinys","SSR_cone")
+  appdir <- system.file(package = "ScPoApps", "shinys","SSR_cone")
   expect_pass(testApp(appdir, compareImages = FALSE))
 })
 
@@ -100,7 +100,7 @@ test_that("reg_dummy app works", {
   # Use compareImages=FALSE because the expected image screenshots were created
   # on a Mac, and they will differ from screenshots taken on the CI platform,
   # which runs on Linux.
-  appdir <- system.file(package = "ScPoEconometrics", "shinys","reg_dummy")
+  appdir <- system.file(package = "ScPoApps", "shinys","reg_dummy")
   expect_pass(testApp(appdir, compareImages = FALSE))
 })
 
@@ -111,6 +111,6 @@ test_that("estimate app works", {
   # Use compareImages=FALSE because the expected image screenshots were created
   # on a Mac, and they will differ from screenshots taken on the CI platform,
   # which runs on Linux.
-  appdir <- system.file(package = "ScPoEconometrics", "shinys","estimate")
+  appdir <- system.file(package = "ScPoApps", "shinys","estimate")
   expect_pass(testApp(appdir, compareImages = FALSE))
 })

@@ -1,7 +1,7 @@
 library(dplyr)
 library(plotly)
 
-data <- ScPoEconometrics:::get_lm(a = 2,b = 1.2, xscale = 5, escale = 3)
+data <- ScPoApps:::get_lm(a = 2,b = 1.2, xscale = 5, escale = 3)
 
 
 ui <- fluidPage(
