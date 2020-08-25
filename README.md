@@ -16,7 +16,8 @@ This is the git repo for undergraduate Econometrics Apps at SciencesPo.
 
 **Tests on MacOS and Linux**: [![Build Status](https://travis-ci.org/ScPoEcon/ScPoApps.svg?branch=master)](https://travis-ci.org/ScPoEcon/ScPoApps)
 
-**Tests on Windows**: [![Build status](https://ci.appveyor.com/api/projects/status/9ctm2rneexsid3t2?svg=true)](https://ci.appveyor.com/project/FlorianOswald/scpoapps)
+**Tests on Windows**: [![Build status](https://ci.appveyor.com/api/projects/status/ehhbwdwjkuxia53o?svg=true)](https://ci.appveyor.com/project/FlorianOswald/scpoapps)
+
 
 
 
