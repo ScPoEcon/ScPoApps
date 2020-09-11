@@ -11,15 +11,15 @@ get_lm <- function(a,b,n=20,xscale = 1, escale = 1, seed = 1){
 #' runTutorial: Run a Tutorial!
 #'
 #' @param tutoname string of which tutorial you want to run
-#' This function runs a given `tutoname` for you. run without an argument \code{runTutorial()} to see a list of available tutorials.
+#' This function runs a given `tutoname` for you. run without an argument \code{runTutorial()} to see a list of available tutorial.
 #' @export
 runTutorial <- function(tutoname) {
   # locate all the examples that exist
-  validExamples <- list.files(system.file("tutorials", package = "ScPoApps"))
+  validExamples <- list.files(system.file("tutorial", package = "ScPoApps"))
 
   validExamplesMsg <-
     paste0(
-      "Valid Tutorials are: '",
+      "Valid tutorial are: '",
       paste(validExamples, collapse = "', '"),
       "'")
 
@@ -33,7 +33,7 @@ runTutorial <- function(tutoname) {
   }
 
   # find and launch
-  appDir <- system.file("tutorials", tutoname, package = "ScPoApps")
+  appDir <- system.file("tutorial", tutoname, package = "ScPoApps")
   rmds = list.files(path=appDir,pattern="\\.Rmd$",full.names=TRUE)
   rmarkdown::run(file = rmds[1])
 }
