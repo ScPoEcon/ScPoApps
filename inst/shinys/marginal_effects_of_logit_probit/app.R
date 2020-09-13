@@ -47,13 +47,15 @@ server <- function(input, output) {
         p + geom_segment(
             x = input$x-0.5, xend = input$x + 0.5,
             y = pnorm(input$x)-0.5*tangent, yend = pnorm(input$x)+0.5*tangent, size = 0.7
-        )
+        ) + annotate("point", x = input$x, 
+                         y = pnorm(input$x), size = 2)
     }else{
         tangent<-(plogis(input$x+delta_x)-plogis(input$x))/delta_x 
         p + geom_segment(
             x = input$x-0.5, xend = input$x + 0.5,
             y = plogis(input$x)-0.5*tangent, yend = plogis(input$x)+0.5*tangent,
-        size = 0.7)
+        size = 0.7) + annotate("point", x = input$x,
+                               y = plogis(input$x), size = 2)
     }
 
     })
