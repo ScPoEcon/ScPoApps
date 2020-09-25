@@ -18,7 +18,7 @@ x = c(6,2,5,3,5,1,5,7,6,3)
 
 
 ## Discrete Data
-In this tutorial we will refer to [chapter 2 of our textbook](https://floswald.github.io/ScPoEconometrics/sum.html). Please go back there if you have any questions.
+In this tutorial we will refer to [chapter 2 of our textbook](https://ScPoEcon.github.io/ScPoEconometrics/sum.html). Please go back there if you have any questions.
 
 I created a vector `x` for you with 10 values, which will be our data in this section:
 
