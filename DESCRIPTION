@@ -2,14 +2,15 @@ Package: ScPoApps
 Type: Package
 Title: ScPoApps
 Date: 2020-08-24
-Version: 0.1
+Version: 0.2
 Authors@R: c(
     person("Florian", "Oswald", email = "florian.oswald@sciencespo.fr", role = c("aut","cre")),
     person("Vincent", "Viers", email = "vincent.viers@sciencespo.fr", role = "ctb"),
+    person("Xinyu", "Dai", email = "xinyu.dai@sciencespo.fr", role = "ctb"),
     person("Pierre", "Villedieu", email = "pierre.villedieu@sciencespo.fr", role = "ctb"))
 Depends: R (>= 3.5.0)
 License: MIT + file LICENSE
-Description: This the R package for the 2nd econometrics course apps at SciencesPo.
+Description: This the R package for econometrics course apps at SciencesPo.
 URL: https://github.com/ScPoEcon/ScPoApps
 Imports: 
     shiny (>= 1.2.0),
