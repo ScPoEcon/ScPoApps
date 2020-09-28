@@ -2,7 +2,8 @@
 
 This is the git repo for undergraduate Econometrics Apps at SciencesPo.
 
-**Book?** If you are looking for the book, that's in the [ScPoEconometrics](https://github.com/ScPoEcon/ScPoEconometrics) repo.
+**Book?** If you are looking for the book, that's in the [ScPoEconometrics](https://github.com/ScPoEcon/ScPoEconometrics) repo.  
+
 **Slides?** If you are looking for the slides, they are in the [ScPoEconometrics-Slides](https://github.com/ScPoEcon/ScPoEconometrics-Slides) repo.
 
 ## Contents
