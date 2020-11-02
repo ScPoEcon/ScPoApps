@@ -2,18 +2,7 @@ library(shiny)
 library(tidyverse)
 library(gganimate)
 library(ggthemes)
-
-
-# p <- ggplot(dffull,aes(y=Y,x=X,color=as.factor(Person)))+geom_point()+
-#     geom_vline(aes(xintercept=mean_X,color=as.factor(Person)))+
-#     geom_hline(aes(yintercept=mean_Y,color=as.factor(Person)))+
-#     guides(color=guide_legend(title="Individual"))+
-#     scale_color_colorblind()+
-#     labs(title = 'The Relationship between Y and X, with Individual Fixed Effects \n{next_state}')+
-#     transition_states(time,transition_length=c(12,32,12,32,12,12),state_length=c(160,100,75,100,75,160),wrap=FALSE)+
-#     ease_aes('sine-in-out')+
-#     exit_fade()+enter_fade()
-
+library(gifski)
 
 ui <- fluidPage(
 
@@ -24,19 +13,21 @@ ui <- fluidPage(
     h5("The model generating our data:"),
     withMathJax("$$X=0.5+0.5(Person-2.5)+\\varepsilon$$"),
     withMathJax("$$Y=\\beta X + (Person-2.5)+\\varepsilon$$"),
-    withMathJax("$$\\varepsilon \\sim N(0,1)$$"),
+    withMathJax("$$\\varepsilon \\sim N(0,1) , \\quad Person \\in \\{1,2,3,4\\}$$"),
     
     sidebarLayout(
         sidebarPanel(
+            withMathJax(),
             sliderInput("cor",
-                        "the coefficient of X in Y:",
+                        label = "the value of \\( \\beta \\) :",
                         min = -1,
                         max = 1,
                         value = -0.5,step = 0.1)
         ),
 
         mainPanel(
-           plotOutput("scatterPlot")
+            helpText("Please wait about 30 seconds every time you select a new value..."),
+            imageOutput("scatterPlot")
         )
     )
 )
@@ -44,7 +35,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
 
-    output$scatterPlot <- renderPlot({
+    output$scatterPlot <- renderImage({
         
         df <- data.frame(Person = rep(1:4,50)) %>%
             mutate(X = .5+.5*(Person-2.5) + rnorm(200)) %>%
@@ -52,6 +43,11 @@ server <- function(input, output) {
             group_by(Person) %>%
             mutate(mean_X=mean(X),mean_Y=mean(Y)) %>%
             ungroup()
+        
+        #Calculate correlations
+        before_cor <- paste("1. Start with raw data. Correlation between X and Y: ",round(cor(df$X,df$Y),3),sep='')
+        after_cor <- paste("6. Analyze what's left! Within-Individual Correlation Between X and Y: ",round(cor(df$X-df$mean_X,df$Y-df$mean_Y),3),sep='')
+        
         
         dffull <- rbind(
             #Step 1: Raw data only
@@ -67,9 +63,28 @@ server <- function(input, output) {
             #Step 6: Raw demeaned data only
             df %>% mutate(X = X - mean_X,Y = Y - mean_Y,mean_X=NA,mean_Y=NA,time=after_cor))
         
-        ggplot(dffull,aes(y=Y,x=X,color=as.factor(Person)))+geom_point()
+        p <- ggplot(dffull,aes(y=Y,x=X,color=as.factor(Person)))+geom_point()+
+                geom_vline(aes(xintercept=mean_X,color=as.factor(Person)))+
+                geom_hline(aes(yintercept=mean_Y,color=as.factor(Person)))+
+                guides(color=guide_legend(title="Individual"))+
+                scale_color_colorblind()+
+                labs(title = 'The Relationship between Y and X, with Individual Fixed Effects \n{next_state}')+
+                transition_states(time,transition_length=c(12,32,12,32,12,12),state_length=c(160,100,75,100,75,160),wrap=FALSE)+
+                ease_aes('sine-in-out')+
+                exit_fade()+enter_fade()
+            
+        
+        anim_save("outfile.gif", animate(p,duration = 5, fps = 20, width = 500, height = 500, nframes=200, renderer = gifski_renderer())) 
 
-    })
+        # Return a list containing the filename
+        list(src = "outfile.gif",
+             contentType = 'image/gif'
+             # width = 400,
+             # height = 300,
+             # alt = "This is alternate text"
+        )}, deleteFile = TRUE)
+
+
 }
 
 # Run the application 
