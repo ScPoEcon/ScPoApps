@@ -2,7 +2,7 @@ library(shiny)
 library(MASS)
 library(ggplot2)
 library(estimatr)
-library(gridExtra)
+library(cowplot)
 library(data.table)
 
 
@@ -29,7 +29,7 @@ makedata <- function(alpha1,n = 1000){
 
     g1 = 10
     
-    # set.seed(1111)
+    set.seed(1111)
     
     d = data.table(u = rnorm(n),
                    e = rnorm(n),
@@ -57,14 +57,17 @@ makedata <- function(alpha1,n = 1000){
 ui <- fluidPage(
 
     # Application title
-    titlePanel("Ability Bias"),
+    titlePanel("Ability Bias and Weak Instrument"),
     withMathJax(),
     textOutput("text"),
-    helpText("Real Model : $$y = b_0 + b_1x + g_1A + b_2s + u$$"),
-    helpText('With: $$a_0 = 5, g_1 = 10 $$'),
-    helpText('Determination of s: $$s = a_0 + g_1A + a_1Z + e$$'),
-    helpText('With: $$ b_0 = 0.7 , b_1 = 0.3 , b_2 = 1$$'),
-    helpText('$$ A \\sim N(0.5,0.25); \\quad Z,x,u,e \\sim N(0,1)$$ '),
+    helpText("In this app we look at how weak instruments impact an earnings equation in an IV setting. Ability A is unobserved."),
+    
+    helpText("True model for earnings : $$y = b_0 + b_1x + g_1A + b_2s + u$$"),
+    helpText("OLS on earning equation : $$y = b_0 + b_1x + b_2s + \\eta$$ where $$\\eta = g_1A + u$$"),
+    helpText('schooling s: $$s = a_0 + g_1A + a_1Z + e$$'),
+    
+    helpText('Parameter values: $$a_0 = 5, g_1 = 10 , b_0 = 0.7 , b_1 = 0.3 , b_2 = 1$$'),
+    helpText('$$ A \\sim N(0.5,0.25); A \\in [0,1] \\quad Z,x,u,e \\sim N(0,1); Z \\in [-2,2]$$ '),
 
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
@@ -74,7 +77,7 @@ ui <- fluidPage(
                         "Value of a1 (Strength of instrument):",
                         min = 0,
                         max = 2,
-                        value = 0.1,step = 0.001),
+                        value = 0.0,step = 0.001),
 
             tableOutput('table')
         ),
@@ -95,10 +98,20 @@ server <- function(input, output) {
     output$distPlot <- renderPlot({
         
         data<-makedata(input$a1)
-
-        p1 <- ggplot(data, aes(x = Z, y = s, color = A)) + geom_point() + stat_smooth(method = "lm",formula = y ~ x)
-        p2 <- ggplot(data, aes(x = s, y = y, color = A)) + geom_point() + stat_smooth(method = "lm",formula = y ~ x)
-        grid.arrange(p1,p2,ncol = 2)
+        # dt = data[,.(x = Z,y = s,A,type = "First Stage")]
+        # dt = rbind(dt, data[,.(x = s,y = y,A,type = "Reduced Form")])
+         
+        # ggplot(dt, aes(x,y, color = A)) +
+        #     geom_point() + 
+        #     scale_color_gradient(low = "yellow", high = "red") +
+        #     stat_smooth(method = "lm",formula = y ~ x) + 
+        #     facet_wrap(~type, scales = "free") + theme_bw()
+# 
+        p1 <- ggplot(data, aes(x = Z, y = s, color = A)) + geom_point() + stat_smooth(method = "lm",formula = y ~ x) +
+            scale_color_gradient(low = "yellow", high = "red") + theme_bw() + scale_y_continuous(limits = c(0,20))
+        p2 <- ggplot(data, aes(x = s, y = y, color = A)) + geom_point() + stat_smooth(method = "lm",formula = y ~ x) +
+            scale_color_gradient(low = "yellow", high = "red") + theme_bw() + scale_y_continuous(limits = c(0,30))
+        cowplot::plot_grid(p1,p2)
 
     })
     
