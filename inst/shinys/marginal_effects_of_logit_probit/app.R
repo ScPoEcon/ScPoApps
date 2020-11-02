@@ -27,7 +27,8 @@ ui <- fluidPage(
             selectInput("model",
                         "Choose a nonlinear model:",
                         choices = c("logit","probit")
-                        )
+                        ),
+            textOutput("slope")
         ),
 
         # Show a plot of the generated distribution
@@ -39,6 +40,7 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
+
 
     output$distPlot <- renderPlot({
         
@@ -58,6 +60,16 @@ server <- function(input, output) {
                                y = plogis(input$x), size = 2)
     }
 
+    })
+    
+    output$slope <- renderText({
+        
+        if (input$model == "probit"){
+            tangent<-(pnorm(input$x+delta_x)-pnorm(input$x))/delta_x
+        }else{
+            tangent<-(plogis(input$x+delta_x)-plogis(input$x))/delta_x 
+        }
+        paste0("Derivative of G at x (i.e. g(x)) = ", round(tangent,3))
     })
 }
 
