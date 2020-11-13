@@ -10,8 +10,7 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 knitr::opts_chunk$set(echo = FALSE)
-library(EnvStats, quietly = TRUE, warn.conflicts = FALSE, verbose = FALSE) # For Pareto Distribution
-# library(distr)
+library(EnvStats) # For Pareto Distribution
 x = c(6,2,5,3,5,1,5,7,6,3)
 ```
 
