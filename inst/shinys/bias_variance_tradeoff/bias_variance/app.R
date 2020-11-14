@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(shinyWidgets)
 library(ggplot2)
 library(dplyr)
 library(gghighlight)
