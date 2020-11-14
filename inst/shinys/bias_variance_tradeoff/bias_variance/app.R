@@ -14,6 +14,12 @@ library(gghighlight)
 library(cowplot)
 library(tidyr)
 
+# globals
+STEP = 10
+MAXDF = 60
+EPS = 1
+DFS = c(2:8,seq(10,MAXDF,by = STEP))
+
 getmodels <- function(x,y,newx,dfs = 2:20){
     r = data.frame(x=x,y=y)
     o = data.frame(x=newx)
@@ -33,19 +39,19 @@ getmodels <- function(x,y,newx,dfs = 2:20){
     list(models = s, pred = o, original = r)
 }
 
-data_alldf <- function(fun = function(x) {x*sin(x-2) + 0.2*x},n=90,ub = 5,nnew = 200,maxdf=60){
+data_alldf <- function(fun = function(x) {x*sin(x-2) + 0.2*x},n=90,ub = 5,nnew = 200){
     set.seed(1234)
-    eps = 1 # hard code variance
+    # eps = 1 # hard code variance
     
     r = data.frame(x = seq(0,ub,length.out = n))
     r$truth = fun(r$x) 
-    r$epsi = rnorm(n,mean = 0, sd = eps)
+    r$epsi = rnorm(n,mean = 0, sd = EPS)
     r$y = r$truth + r$epsi
     
-    mods = getmodels(r$x,r$y,seq(0,ub, length.out = nnew),dfs = seq(2,maxdf,by = 2))
+    mods = getmodels(r$x,r$y,seq(0,ub, length.out = nnew),dfs = DFS)
     # add test data to predictions
     mods$pred$truth = fun(mods$pred$x)
-    mods$pred$testdata = mods$pred$truth + rnorm(nnew,mean = 0, sd = eps)
+    mods$pred$testdata = mods$pred$truth + rnorm(nnew,mean = 0, sd = EPS)
     mods$plotdata = mods$pred %>% 
         select(-testdata) %>%
         tidyr::pivot_longer(-x,names_to = "flexibility")
@@ -61,7 +67,7 @@ data_alldf <- function(fun = function(x) {x*sin(x-2) + 0.2*x},n=90,ub = 5,nnew =
     mses$var <- diag(var(mods$pred[,names(mods$models)]))
     
     mses$plotdata <- data.frame(mses)
-    mses$plotdata$flexibility = seq(2,maxdf,by = 2)
+    mses$plotdata$flexibility = DFS
     mses$plotdata = mses$plotdata %>% tidyr::pivot_longer(-flexibility, names_to = "variable")
     
     
@@ -78,11 +84,12 @@ plot_singledf <- function(x,df){
     p = ggplot(d %>% filter(flexibility != "truth"))
     p = p + geom_line(aes(x = x, y = value, color = flexibility), size = 1) + gghighlight(flexibility == paste0("df",df))
     p = p + geom_line(data = d %>% filter(flexibility == "truth"), aes(x=x,y = value), color = "black", size = 1)
-    p = p + geom_point(data = x$models$original, aes(x,y), shape = 1,size = 2) + theme_bw()
+    p = p + geom_point(data = x$models$original, aes(x,y), shape = 1,size = 2) + theme_bw() + labs(title = "Fitting Data on f: f(x) + e", caption = "Solid black line is true f. Circles are realizations of f(X) + e: the data.") + ylab("Estimate of f")
     
     b = ggplot(m, aes(x=flexibility,y = value, color = variable)) + 
-        geom_point() + gghighlight(flexibility == df)
-    b = b + geom_hline(yintercept = 1, linetype = "dashed", color = "grey")+ theme_bw()
+        geom_point(size = 3, shape = 15) + gghighlight(flexibility == df)
+    b = b + geom_line(data = m, aes(x=flexibility, y = value, group = variable), color = "grey")  + ylab("MSE") + xlab("degree of flexibility (degrees of freedom)")
+    b = b + geom_hline(yintercept = 1, linetype = "dashed", color = "grey")+ theme_bw() + labs(title = "Mean Squared Errors")
     cowplot::plot_grid(p,b)
 }
 
@@ -96,12 +103,13 @@ ui <- fluidPage(
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-            sliderInput("df",
+            shinyWidgets::sliderTextInput("df",
                         "Degrees of Freedom:",
-                        min = 2,
-                        max = 60,
-                        step = 2,
-                        value = 2)
+                        choices = DFS)
+                        # min = 2,
+                        # max = MAXDF,
+                        # step = 1,
+                        # value = 2)
         ),
 
         # Show a plot of the generated distribution
