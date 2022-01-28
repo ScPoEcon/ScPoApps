@@ -11,14 +11,14 @@ ui <- fluidPage(
                            max = 3, step = .5, value = .5),
                sliderInput("s_dm", "Slope", min = -2,
                            max = 2, step = .1, value = .1),
-
+               
                checkboxInput("dm", "De-mean X and Y!", value = FALSE),
-
+               
                br(),
                br(),
-
+               
                verbatimTextOutput("userguess_dm")),
-
+  
   mainPanel(
     plotOutput("regPlot_dm")))
 
@@ -26,7 +26,7 @@ server <- function(input,output){
   output$userguess_dm <- renderText({
     x = data$x
     y = data$y
-
+    
     if (input$dm == TRUE){
       x <- x - mean(x)
       y <- y - mean(y)
@@ -34,38 +34,38 @@ server <- function(input,output){
     # a = intercept, b = slope (user input)
     a <- input$i_dm
     b <- input$s_dm
-
+    
     # plot
     expr <- function(x) a + b*x
     errors <- (a + b*x) - y
-
+    
     if (input$dm == FALSE){
       paste0("Your guess:\ny = ", a, " + ", b, "x.\nSSR = ",round(mean(errors^2),2))
     } else {
       paste0("Your guess:\n[y - mean(y)] = ", a, " + ", b, " [x - mean(x)].\nSSR = ",round(mean(errors^2),2))
     }
-
-
+    
+    
   })
-
+  
   output$regPlot_dm <- renderPlot({
     #Load Data
     x = data$x
     y = data$y
-
+    
     if (input$dm == TRUE){
       x <- x - mean(x)
       y <- y - mean(y)
     }
-
+    
     # a = intercept, b = slope (user input)
     a <- input$i_dm
     b <- input$s_dm
-
+    
     # plot
     expr <- function(x) a + b*x
     errors <- (a + b*x) - y
-
+    
     yl = range(data$y)
     yl[1] = yl[1] - abs(yl[1])*0.1
     yl[2] = yl[2] + abs(yl[2])*0.1
@@ -75,12 +75,14 @@ server <- function(input,output){
          # ylim = c(-5, 10),
          main = "Fit the data!", frame.plot = FALSE,
          cex = 1.2)
-
-
+    
+    
     b_true <- data$b
     a_true <- ifelse(input$dm, 0, data$a)
-
-    if (a == a_true && b == b_true) {
+    a_solution <- round(2 * summary(lm(y ~ x))$coefficients[1, 1]) / 2
+    b_solution <- round(summary(lm(y ~ x))$coefficients[2, 1], 1)
+    
+    if (a == a_solution && b == b_solution) {
       # plot green
       curve(expr = expr, from = min(x)-10, to = max(x)+10, add = TRUE, col = "black")
       segments(x0 = x, y0 = y, x1 = x, y1 = (y + errors), col = "green")
@@ -99,7 +101,7 @@ server <- function(input,output){
       abline(h=0,col='blue',lty='dashed')
       abline(v=0,col='blue',lty='dashed')
     }
-
+    
   })
 }
 
