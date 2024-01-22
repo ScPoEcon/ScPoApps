@@ -8,7 +8,9 @@ x <- rnorm(n = 20, mean = 2, sd = 4)
 
 a_true <- -2
 b_true <- 1.5
-y <- a_true + b_true*x + rnorm(n = 20, mean = 0, sd = 1.5)
+y <- a_true + b_true*x + rnorm(n = 20, mean = 0, sd = 1)
+ab_real <- coef(lm(y ~ x))
+
 
 ui <- fluidPage(
   br(),
@@ -17,9 +19,11 @@ ui <- fluidPage(
 
   column(width = 2,
          sliderInput("i_ssr", "Intercept", min = -4,
-                     max = 4, step = .25, value = .5),
+                     max = 4, step = .05, value = .5),
          sliderInput("s_ssr", "Slope", min = -1,
-                     max = 3, step = .25, value = -1),
+                     max = 3, step = .05, value = -1),
+         checkboxInput("show_true", "show true values?", value = FALSE, width = NULL),
+         
          br(),
          br(),
 
@@ -39,11 +43,21 @@ server <- function(input,output){
     a <- input$i_ssr
     b <- input$s_ssr
     errors <- (a + b*x) - y
-    paste0("Your guess:\n y = ", a, " + ", b, "x\n SSR = ", round(sum(errors^2),3))
+    if (input$show_true){
+        paste0("Your guess:\n y = ", a, " + ", b, "x\n SSR = ", round(sum(errors^2),3),"\n trueb \n",ab_real[2],"\n truea \n",ab_real[1])
+        
+    } else{
+        paste0("Your guess:\n y = ", a, " + ", b, "x\n SSR = ", round(sum(errors^2),3))
+        
+    }
+        
 
   })
 
   output$regPlot_ssr <- renderPlot({
+      
+      tol = 0.09
+      
 
     # a = intercept, b = slope (user input)
     a <- input$i_ssr
@@ -59,8 +73,8 @@ server <- function(input,output){
          main = "Fit the data!", frame.plot = FALSE,
          cex = 1.2)
 
-    if (a == a_true &&  b == b_true){
-      curve(expr = expr, from = min(x)-10, to = max(x)+10, add = TRUE, col = "black")
+    if ((abs(a - ab_real[1]) < tol) && (abs(b - ab_real[2]) < tol)){
+        curve(expr = expr, from = min(x)-10, to = max(x)+10, add = TRUE, col = "black")
       segments(x0 = x, y0 = y, x1 = x, y1 = (y + errors), col = "green")
       rect(xleft = x, ybottom = y,
            xright = x + abs(errors), ytop = y + errors, density = -1,

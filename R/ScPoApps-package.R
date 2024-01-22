@@ -6,11 +6,11 @@
 #'
 #' @section Tutorials:
 #' The package contains several tutorials which can be
-#' launched via \code{\link{runTutorial}}
+#' launched via [runTutorial()]
 #'
 #' @section Apps:
 #' The package also contains several interactive apps
-#' which you launch via \code{\link{launchApp}}
+#' which you launch via [launchApp()]
 #'
 #' @docType package
 #' @name ScPoApps

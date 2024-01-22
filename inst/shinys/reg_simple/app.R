@@ -10,6 +10,7 @@ x <- rnorm(n = 20, mean = 2, sd = 4)
 a_true <- -2
 b_true <- 1.5
 y <- a_true + b_true*x + rnorm(n = 20, mean = 0, sd = 1)
+ab_real <- coef(lm(y ~ x))
 
 ui <- fluidPage(
   br(),
@@ -18,14 +19,15 @@ ui <- fluidPage(
                            max = 4, step = .1, value = .5),
                sliderInput("s_simple", "Slope", min = -2,
                            max = 2, step = .1, value = -1),
+               checkboxInput("show_true", "show true values?", value = FALSE, width = NULL),
+               
                br(),
                br(),
 
-               textOutput("userguess_simple")),
-
+               verbatimTextOutput("userguess_simple")),
+  
   mainPanel(
-    plotOutput("regPlot_simple")),
-    textOutput("MSE2"))
+    plotOutput("regPlot_simple")))
 
 
 server <- function(input,output){
@@ -33,11 +35,33 @@ server <- function(input,output){
 
     a <- input$i_simple
     b <- input$s_simple
-    paste0("Your guess:\n y = ", a, " + ", b, "x")
+    
+    
+    # a = intercept, b = slope (user input)
+    a <- input$i_simple
+    b <- input$s_simple
+    
+    
+    # plot
+    expr <- function(x) a + b*x
+    errors <- (a + b*x) - y
+    
+    paste0("Total Sum of Squared Errors = ", round(sum(errors^2),2))
+    
+    if (input$show_true){
+        paste0("Your guess: y = ", a, " + ", b, "x", "\n SSR = ", round(sum(errors^2),3),"\n trueb \n",ab_real[2],"\n truea \n",ab_real[1])
+        
+    } else{
+        paste0("Your guess: y = ", a, " + ", b, "x", "\n SSR = ", round(sum(errors^2),3))
+        
+    }
+    
 
   })
 
   output$regPlot_simple <- renderPlot({
+      
+      tol = 0.09
 
     # set.seed(19)
     #
@@ -66,7 +90,7 @@ server <- function(input,output){
          main = "Fit the data!", frame.plot = FALSE,
          cex = 1.2)
 
-    if ((a == a_true) && (b == b_true)){
+    if ((abs(a - ab_real[1]) < tol) && (abs(b - ab_real[2]) < tol)){
       curve(expr = expr, from = min(x)-10, to = max(x)+10, add = TRUE, col = "black")
       segments(x0 = x, y0 = y, x1 = x, y1 = (y + errors), col = "green")
       rect(xleft = x, ybottom = y,
@@ -105,6 +129,14 @@ server <- function(input,output){
     errors <- (a + b*x) - y
 
     paste0("Total Sum of Squared Errors = ", round(sum(errors^2),2))
+    
+    if (input$show_true){
+        paste0("Your guess:\n SSR = ", round(sum(errors^2),3),"\n trueb \n",ab_real[2],"\n truea \n",ab_real[1])
+        
+    } else{
+        paste0("Your guess:\n SSR = ", round(sum(errors^2),3))
+        
+    }
 
   })
 

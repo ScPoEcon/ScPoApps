@@ -8,7 +8,7 @@ runTutorial(tutoname)
 }
 \arguments{
 \item{tutoname}{string of which tutorial you want to run
-This function runs a given `tutoname` for you. run without an argument \code{runTutorial()} to see a list of available tutorials.}
+This function runs a given \code{tutoname} for you. run without an argument \code{runTutorial()} to see a list of available tutorial.}
 }
 \description{
 runTutorial: Run a Tutorial!

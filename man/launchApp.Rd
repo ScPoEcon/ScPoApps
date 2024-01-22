@@ -8,7 +8,7 @@ launchApp(appname)
 }
 \arguments{
 \item{appname}{string of which app you want to run
-This function runs the shiny app for a given `appname`. run without an argument \code{launchApp()} to see a list of available apps.}
+This function runs the shiny app for a given \code{appname}. run without an argument \code{launchApp()} to see a list of available apps.}
 }
 \description{
 launchApp: Launch an App!

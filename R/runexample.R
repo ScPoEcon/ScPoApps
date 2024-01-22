@@ -11,7 +11,7 @@ get_lm <- function(a,b,n=20,xscale = 1, escale = 1, seed = 1){
 #' runTutorial: Run a Tutorial!
 #'
 #' @param tutoname string of which tutorial you want to run
-#' This function runs a given `tutoname` for you. run without an argument \code{runTutorial()} to see a list of available tutorial.
+#' This function runs a given `tutoname` for you. run without an argument `runTutorial()` to see a list of available tutorial.
 #' @export
 runTutorial <- function(tutoname) {
   # locate all the examples that exist
@@ -42,7 +42,7 @@ runTutorial <- function(tutoname) {
 #' launchApp: Launch an App!
 #'
 #' @param appname string of which app you want to run
-#' This function runs the shiny app for a given `appname`. run without an argument \code{launchApp()} to see a list of available apps.
+#' This function runs the shiny app for a given `appname`. run without an argument `launchApp()` to see a list of available apps.
 #' @export
 launchApp <- function(appname) {
   # locate all the shiny app examples that exist
